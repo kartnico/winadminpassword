@@ -1,0 +1,182 @@
+WinAdminPassword 1.5
+====================
+
+# Description
+====================
+
+ Tool for the deployment of unique passwords for Windows and Unix systems. It is based on the serial number
+ of computers and a secret key. The advantage is that no password is stored in a database and
+ you can display them with a GLPI plugin, Webmin...
+
+# Installation
+====================
+
+ Prerequisistes :
+	* POSIX / GNU Linux/ Unix systems : Perl, Config::Crontab, Digest::SHA1, dmidecode and chpasswd
+	* Microsoft Windows systems : ActivePerl
+
+ Installation : 
+	* Microsoft Windows x64 : 
+		- perl is not installed : Execute "Win32\winadminpassword-1.5-x64.exe" file
+		- Perl is already installed : Execute "Win32\winadminpassword-1.5-noarch-without-perl.exe" file
+
+	* Microsoft Windows x86 :
+		- Perl is not installed : Execute "Win32\winadminpassword-1.5-x86.exe" file
+		- Perl is already installed : Execute "Win32\winadminpassword-1.5-noarch-without-perl.exe" file
+
+	For Microsoft Windows, you can deploy packages with the silent parameter "/S".
+	(See GPO, Sysprep, PsExec, WPKG, OCSInventory NG, FusionInventory, Uranos...)
+
+	* RHEL/CentOS/Fedora :
+		- install perl-Config-Crontab RPM : http://pkgs.org/search/?keyword=perl-Config-Crontab
+		> cd RPM
+		> yum install winadminpassword-1.5-0.1.noarch.rpm
+
+	* OpenSuze :
+		> yast2 --install perl perl-Config-Crontab perl-Digest-SHA1 dmidecode
+		> cd RPM
+		> rpm -ivh winadminpassword-1.5-0.1.noarch.rpm
+
+	* Mandriva :
+		> urpmi perl perl-Config-Crontab perl-Digest-SHA1 dmidecode
+		> cd RPM
+		> rpm -ivh winadminpassword-1.5-0.1.noarch.rpm
+
+	* Debian/Ubuntu :
+		> apt-get install dmidecode libdigest-sha1-perl
+		> cd DEB
+		> dpkg -i libconfig-crontab-perl_1.33-1_all.deb
+		> dpkg -i winadminpassword_1.5_all.deb
+
+	* GNU Linux / BSD / POSIX : 
+		- install perl : http://www.perl.org/
+		- install dmidecode : http://www.nongnu.org/dmidecode/
+		- install chpasswd 
+		- install Config::Crontab : perl -MCPAN -e 'install Config::Crontab'
+		- install Digest::SHA1 : perl -MCPAN -e 'install Digest::SHA1'
+		- install WinAdminPassword :
+			> cd Others
+			> perl Makefile.PL
+			> make
+			> make install
+
+ Use :
+	> winadminpassword --help
+	> man winadminpassword
+
+# Manual
+====================
+
+Usage
+        winadminpassword [-v] [-h] [--printserial] [--printpassword] [--changepassword] [-s serial] [-k secretkey]
+ [-u username] [-w password] [-l length] [-a algorith] [-r color] [-z size] [-j] [-o] [-t] [-d date]
+ [-x secondsecretkey] [-g] [--printdate]
+
+Functions
+ -v, --version                          Displays the script version
+ -h, --help                             This information
+ -y, --printdate                        Print date in WinAdminPassword format
+ -m, --showserial, --printserial        Print serial number of this computer
+ -p, --showpasswd, --printpassword      Print password (-k and -l are mandatory)
+ -c, --chpasswd, --changepassword       Change password for a user (-k, -u and -l are mandatory)
+
+Options
+ -o, --verbose                          Print generated password when you use --changepassword function
+ -s, --serial=SERIAL                    Set the serial number
+                                        default : the serial number of computer where the script is executed
+ -k, --key=KEY                          The very secret key
+ -x, --skey, --secondkey=KEY            The second key (optional but really useful with the GLPI plugin because
+					it is not stored in the database and it is requested each time to the passwords)
+					you can use a simple passphrase
+ -u, --user=USER                        Set the username of the local account to change his password
+ -w, --passwd, --password=PASSWORD      Set the password if you don't want use the generated password
+ -l, --length=LENGTH                    Set the length of the generated password
+ -a, --algo=ALGO                        Set the algorithm for generating the hash that will be use to generate password
+                                                1 : \$key.\$serial
+                                                2 : \$serial\$key
+                                                3 : \$serial\$key\$serial
+                                                4 : \$key\$serial\$key
+                                                5 : \$key\$serial
+                                                default : 1
+ -j, --html                             Print the output of --printpassword in HTML
+ -r, --color=COLOR                      Set the print color for the html output
+                                        default : orange
+ -z, --size=SIZE                        Set the size for the html output
+                                        default : 16
+ -t, --time                             Add the current time to the hash, in order to generate a password
+					based on the system time
+ -g, --cron                             Add the command line to cron, it will be executed every
+					hours. (Very useful with -t)
+ -d, --date=DATE                        Set the date to find a timed generated password
+                                                use "10.2011.Feb.12" for Feb 12 2011 at 10am
+                                                Months : Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+                                                Hours : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+
+!! On unix or GNU Linux systems, you must despecialize $ charaters with \ in your command line
+
+Samples
+
+ PrintSerial :
+        # winadminpassword --printserial
+                print the serial number of this computer
+
+ PrintDate : 
+	# winadminpassword --printdate
+		print the current system date in WinAdminPassword format
+
+ ChangePassword :
+        # winadminpassword --changepassword -k "myverysecretkey" -l "12" -u "Administrator" -o
+                change the password for Administrator account. The password size will be 12. 
+		The output will print the generated password
+
+        # winadminpassword --changepassword -k "myverysecretkey" -l "12" -u "root" -t
+                change the password for root account. The password size will be 12.
+		The generated password will be based on systemtime. Use -d parameter to find it.
+
+        # winadminpassword --changepassword -k "myverysecretkey" -l "12" -u "root" -t -g
+                add this command to cron. Every hour the password will be changed. Use -d parameter to find it.
+
+ PrintPassword :
+        # winadminpassword --printpassword -a "2" -s "AB4528CF" -k "myverysecretkey" -l "18" -j -r "red" -z "12"
+                print the generated password with myverysecretkey and the second algorithm for the 
+		AB4528CF serial. The output will be in HTML in red and with size 12.
+
+        # winadminpassword --printpassword -l 12 -s "AB4HGD" -k "myverysecretkey" -x "hello" -d "3.2011.Jul.28"
+                print the result of timed generated password at 3 Hours in July 28 2011. 
+		The second secret key is "hello".
+
+# FIND PASSWORDS
+====================
+
+ You can place winadminpassword script on Webmin software and call the command : 
+  - winadminpassword --printpassword -k "myverysecretkey" -s "$getserialfromform" -l "12" -j
+
+ You also have a GLPI plugin if you want to print them in GLPI (https://forge.indepnet.net/projects/winadminpassword)
+
+# DEPENDENCIES
+====================
+
+This module requires these other modules and libraries:
+Config::Crontab
+Digest::SHA1
+
+# COPYRIGHT AND LICENCE
+====================
+
+# WinAdminPassword - A utility to deploy unique passwords for Microsoft Windows and Unix systems. #
+# It is based on the serial number of computers and a private key. #
+# The advantage is that no password is stored in a database. #
+# Copyright (C) 2011 Nicolas BOURGES #
+# 
+# This program is free software: you can redistribute it and/or modify #
+# it under the terms of the GNU General Public License as published by #
+# the Free Software Foundation, either version 3 of the License, or #
+# (at your option) any later version. #
+# 
+# This program is distributed in the hope that it will be useful, #
+# but WITHOUT ANY WARRANTY. without even the implied warranty of #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the #
+# GNU General Public License for more details. #
+#
+# You should have received a copy of the GNU General Public License #
+# along with this program.  If not, see <http://www.gnu.org/licenses/>. #

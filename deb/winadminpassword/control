@@ -1,0 +1,32 @@
+Source: winadminpassword
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 7)
+Build-Depends-Indep: perl
+Maintainer: Nicolas BOURGES <nicolas.bourges@isep.fr>
+Standards-Version: 3.9.1
+Homepage: http://winadminpasswd.sourceforge.net
+
+Package: winadminpassword
+Architecture: all
+Depends: ${misc:Depends}, ${perl:Depends}
+Description: WinAdminPassword
+ Tool for the deployment of unique passwords for Windows and Unix systems. It
+ is based on the serial number of computers and a secret key. The advantage is
+ that no password is stored in a database and you can display them with a GLPI
+ plugin, Webmin...
+ .
+ Features
+ .
+ - Generate passwords based on a secret key and computers serial numbers
+ .
+ - Generate passwords based on the system time
+ .
+ - Display generated passwords
+ .
+ - Change user passwords on Microsoft Windows and Unix systems
+ .
+ - Print serial number on Microsoft Windows and Unix systems
+ .
+ - Add a system task (cron) to change password periodically
+ .

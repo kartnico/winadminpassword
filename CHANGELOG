@@ -1,0 +1,45 @@
+Revision history for WinAdminPassword.
+
+Thu August 10 2011
+1.5 Final
+  * --cron Bug : Add path for dmidecode and chpasswd
+  * Change Date format "Hour.Year.Month.Day" ex : "9.2011.Aug.18" for 2011 August 18 at 9am
+  * Add --cron for Microsoft Windows systems
+  * Add --time parameter for --printpassword
+  * Add one letter parameters
+  * Clean code
+  * Compatible with Perl 5.8
+  * Add setup for 64 bits Microsoft Windows systems
+  * Add RPM file
+  * Add DEB file
+  * Update manual and README
+  * Delete GLPI plugin. Get it here : https://forge.indepnet.net/projects/winadminpassword
+  * Works on Debian 6, Ubuntu 11.04, CentOS 5, RHEL 5, Fedora 15, OpenSuze 11.4, 
+    Mandriva 2010.2, Microsoft Windows XP and Microsoft Windows 7 (x86 and x64)
+
+Mon August 01 2011
+1.4 Final
+  * FIXME : Correct bug when serial equal zero for --changepassword and --printpassword functions
+  * Add --cron parameters for Unix systems
+  * NSIS : Add .PL to PATHEXT for Microsoft Windows systems, in order to use winadminpassword command without extension
+
+Sat July 30 2011
+1.3 Final
+  * Add generated passwords based on the system time (Really useful with a cron task. The password will change every hours)
+  * Add secondkey parameter in order to use a simple key to print passwords in GLPI
+  * Bug : Use --password parameter with --changepassword function
+  * It works on Microsoft Windows 2008R2
+
+Thu July 26 2011
+1.2 Final
+  * Change all names of command line parameters (see README.TXT).
+  * Add printserial function.
+  * Add GLPI Plugin version 1.0.1.
+
+Mon July 21 2011
+1.1 Final
+  * New GLPI plugin for WinAdminPassword.
+
+Mon July 18 2011
+1.0 Final
+  * First revision. It works on Microsoft Windows XP, 7 and Ubuntu.
